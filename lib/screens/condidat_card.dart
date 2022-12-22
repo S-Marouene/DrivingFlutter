@@ -10,6 +10,7 @@ class CondidatCard extends StatelessWidget {
     required this.press,
   }) : super(key: key);
 
+test 
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
 
   final int itemIndex;
