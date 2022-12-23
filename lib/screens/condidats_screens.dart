@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:driving/models/condidats.dart';
+import 'package:driving/screens/details_condidat/details_condidat.dart';
 import 'package:flutter/material.dart';
 // ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
@@ -84,7 +85,16 @@ class _CondidatsScreenState extends State<CondidatsScreen> {
                     itemBuilder: (context, index) => CondidatCard(
                           itemIndex: index,
                           condidat: condidats[index],
-                          press: () {},
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                  condidat: condidats[index],
+                                ),
+                              ),
+                            );
+                          },
                         )),
               ),
             ]))
