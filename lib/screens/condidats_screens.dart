@@ -1,9 +1,13 @@
-import 'dart:convert';
+// ignore_for_file: unused_field
+
+import 'dart:async';
 import 'package:driving/models/condidats.dart';
 import 'package:flutter/material.dart';
 // ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
-import '../dio.dart';
+import '../constants.dart';
+import '../data/allcondidats.dart';
+import '../widgets/search_widget.dart';
 import 'condidat_card.dart';
 
 class CondidatsScreen extends StatefulWidget {
@@ -14,43 +18,107 @@ class CondidatsScreen extends StatefulWidget {
 }
 
 class _CondidatsScreenState extends State<CondidatsScreen> {
-  Future<List<Condidat>> getCondidats() async {
-    Dio.Response response = await dio()
-        .get('/allCondidats', options: Dio.Options(headers: {'auth': true}));
+  String query = '';
+  List<Condidat> condidats = [];
+  Timer? debouncer;
 
-    List condidats = json.decode(response.toString());
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
 
-    return condidats.map((condidat) => Condidat.fromJson(condidat)).toList();
+  @override
+  void dispose() {
+    debouncer?.cancel();
+    super.dispose();
+  }
+
+  void debounce(
+    VoidCallback callback, {
+    Duration duration = const Duration(milliseconds: 1000),
+  }) {
+    if (debouncer != null) {
+      debouncer!.cancel();
+    }
+
+    debouncer = Timer(duration, callback);
+  }
+
+  Future init() async {
+    final condidats = await CondidatsApi.getCondidats(query);
+    setState(() => this.condidats = condidats);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Liste condidats'),
-      ),
-      body: Center(
-        child: Center(
-          child: Center(
-              child: FutureBuilder<List<Condidat>>(
-                  future: getCondidats(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: snapshot.data?.length,
-                          itemBuilder: (context, index) => CondidatCard(
-                                itemIndex: index,
-                                condidat: snapshot.data![index],
-                                press: () {},
-                              ));
-                    } else if (snapshot.hasError) {
-                      return Text('No posts found!');
-                    }
-
-                    return CircularProgressIndicator();
-                  })),
-        ),
-      ),
-    );
+    return SafeArea(
+        bottom: false,
+        child: Scaffold(
+          backgroundColor: kPrimaryColor,
+          appBar: AppBar(
+            title: Text('Liste condidats'),
+          ),
+          body: Column(children: [
+            const SizedBox(height: kDefaultPadding / 2),
+            Expanded(
+                child: Stack(children: [
+              Container(
+                margin: const EdgeInsets.only(top: 70.0),
+                decoration: const BoxDecoration(
+                  color: kBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: buildSearch(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 75),
+                child: ListView.builder(
+                    itemCount: condidats.length,
+                    itemBuilder: (context, index) => CondidatCard(
+                          itemIndex: index,
+                          condidat: condidats[index],
+                          press: () {},
+                        )),
+              ),
+            ]))
+          ]),
+        ));
   }
+
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: 'Nom ou prenom',
+        //onChanged: (value) => {},
+        onChanged: searchBook,
+      );
+
+  Future searchBook(String query) async => debounce(() async {
+        final condidats = await CondidatsApi.getCondidats(query);
+
+        if (!mounted) return;
+
+        setState(() {
+          this.query = query;
+          this.condidats = condidats;
+        });
+      });
+
+  /*  Widget buildBook(Condidat condidat) => ListTile(
+        leading: Image.network(
+          condidat.urlImage,
+          fit: BoxFit.cover,
+          width: 50,
+          height: 50,
+        ),
+        title: Text(book.title),
+        subtitle: Text(book.author),
+      ); */
+
 }

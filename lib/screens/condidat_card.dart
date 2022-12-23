@@ -10,7 +10,6 @@ class CondidatCard extends StatelessWidget {
     required this.press,
   }) : super(key: key);
 
-test 
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
 
   final int itemIndex;
@@ -23,49 +22,51 @@ test
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 8 / 2,
+        horizontal: 18,
+        vertical: 1.0,
       ),
-      height: 190.0,
+      height: 120.0,
       child: InkWell(
         onTap: press,
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
             Container(
-              height: 166.0,
+              height: 100.0,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
                 // ignore: prefer_const_literals_to_create_immutables
                 boxShadow: [
                   const BoxShadow(
                       offset: Offset(0, 15),
                       blurRadius: 25,
-                      color: Colors.black12),
+                      color: Color.fromARGB(31, 206, 21, 21)),
                 ],
               ),
             ),
             Positioned(
-              top: 45.0,
+              top: 22.0,
               left: 0.0,
               child: Container(
                 padding: const EdgeInsets.all(8),
-                height: 120.0,
-                width: 130.0,
-                child: Image.network(URLpic +
-                    (condidat.photo == ''
-                        ? 'unknown_profile.png'
-                        : condidat.photo!)),
+                height: 100.0,
+                width: 110.0,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(URLpic +
+                      (condidat.photo == ''
+                          ? 'unknown_profile.png'
+                          : condidat.photo!)),
+                ),
               ),
             ),
             Positioned(
               bottom: 0.0,
               right: 0.0,
               child: SizedBox(
-                height: 136.0,
+                height: 110.0,
                 // Because oure image is 200 width, then: width - 200
-                width: size.width - 200,
+                width: size.width - 180,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,7 +76,7 @@ test
                       child: Text(
                         // ignore: prefer_interpolation_to_compose_strings
                         condidat.nom! + ' ' + condidat.prenom!,
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                     const Spacer(),
@@ -83,7 +84,6 @@ test
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         'Tel : ${condidat.num_tel}',
-                        style: Theme.of(context).textTheme.caption,
                       ),
                     ),
                     const Spacer(),
