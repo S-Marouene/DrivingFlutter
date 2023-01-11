@@ -1,4 +1,5 @@
 import 'package:driving/providers/auth.dart';
+import 'package:driving/screens/login_screen.dart';
 import 'package:driving/widgets/nav-drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,7 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _attemptAuthentication() async {
     final key = await storage.read(key: 'auth');
-    //print(key);
+
+    await Future.delayed(Duration(seconds: 3));
     // ignore: use_build_context_synchronously
     Provider.of<Auth>(context, listen: false).attempt(key!);
   }
@@ -54,19 +56,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      drawer: NavDrawer(),
       body: Center(child: Consumer<Auth>(
         builder: (context, auth, child) {
-          if (auth.authenticated) {
-            return Text('You are logged in!');
+          if (auth.authenticated == true) {
+            return HomeScreen();
           } else {
-            return Text('You are not logged in!');
+            return LoginScreen();
           }
         },
       )),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bienvenu'),
+      ),
+      drawer: NavDrawer(),
+      body: Text("bienvenu"),
     );
   }
 }

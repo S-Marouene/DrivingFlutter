@@ -12,7 +12,6 @@ class DetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // to provide us the height and the width of the sceen
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,10 +42,7 @@ class DetailsBody extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  // ignore: prefer_const_literals_to_create_immutables, duplicate_ignore
-                  children: [
-                    // ignore: prefer_const_constructors
-                  ],
+                  children: [],
                 ),
               ),
               Padding(

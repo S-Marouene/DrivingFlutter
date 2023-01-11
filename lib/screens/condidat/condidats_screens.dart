@@ -1,14 +1,11 @@
-// ignore_for_file: unused_field
-
 import 'dart:async';
 import 'package:driving/models/condidats.dart';
-import 'package:driving/screens/details_condidat/details_condidat.dart';
+import 'package:driving/screens/condidat/details_condidat/details_condidat.dart';
 import 'package:flutter/material.dart';
-// ignore: library_prefixes
-import 'package:dio/dio.dart' as Dio;
-import '../constants.dart';
-import '../data/allcondidats.dart';
-import '../widgets/search_widget.dart';
+import '../../constants.dart';
+import '../../data/allcondidats.dart';
+import '../../widgets/nav-drawer.dart';
+import '../../widgets/search_widget.dart';
 import 'condidat_card.dart';
 
 class CondidatsScreen extends StatefulWidget {
@@ -59,7 +56,9 @@ class _CondidatsScreenState extends State<CondidatsScreen> {
           backgroundColor: kPrimaryColor,
           appBar: AppBar(
             title: Text('Liste condidats'),
+            backgroundColor: Color(0xff764abc),
           ),
+          drawer: NavDrawer(),
           body: Column(children: [
             const SizedBox(height: kDefaultPadding / 2),
             Expanded(
@@ -119,16 +118,4 @@ class _CondidatsScreenState extends State<CondidatsScreen> {
           this.condidats = condidats;
         });
       });
-
-  /*  Widget buildBook(Condidat condidat) => ListTile(
-        leading: Image.network(
-          condidat.urlImage,
-          fit: BoxFit.cover,
-          width: 50,
-          height: 50,
-        ),
-        title: Text(book.title),
-        subtitle: Text(book.author),
-      ); */
-
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/condidats.dart';
+import '../../models/condidats.dart';
 
 class CondidatCard extends StatelessWidget {
   const CondidatCard({

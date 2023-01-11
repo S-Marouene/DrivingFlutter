@@ -1,24 +1,55 @@
+import 'package:driving/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
-import '../screens/login_screen.dart';
-import '../screens/condidats_screens.dart';
+import '../screens/condidat/condidats_screens.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
-
+  static const URLpic = 'https://smdev.tn/storage/profile_pic/';
   @override
   Widget build(BuildContext context) {
-    return Drawer(child: Consumer<Auth>(
-      builder: (context, auth, child) {
-        if (auth.authenticated) {
+    return Drawer(
+        width: MediaQuery.of(context).size.width * 0.5,
+        child: Consumer<Auth>(builder: (context, auth, child) {
           return ListView(
+            padding: EdgeInsets.zero,
             children: [
-              ListTile(
-                title: Text('${auth.user.name!} ${auth.user.email!}'),
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(color: Color(0xff764abc)),
+                accountName: Text('${auth.user.name!} ${auth.user.fname!}'),
+                accountEmail: Text(
+                  'Auto ecole : ' + auth.user.school_name!,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage(URLpic +
+                      (auth.user.path == ''
+                          ? 'unknown_profile.png'
+                          : auth.user.path!)),
+                ),
               ),
               ListTile(
-                title: Text('Liste Condidats'),
+                leading: Icon(
+                  Icons.home,
+                ),
+                title: const Text('Tableau de bord'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.people_alt_rounded,
+                ),
+                title: const Text('Liste Condidat'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -28,32 +59,33 @@ class NavDrawer extends StatelessWidget {
                   );
                 },
               ),
+              Divider(),
               ListTile(
-                title: Text('Logout'),
+                leading: Icon(
+                  Icons.logout,
+                ),
+                title: const Text('Déconexion'),
                 onTap: () {
                   Provider.of<Auth>(context, listen: false).logout();
                 },
-              )
+              ),
+              AboutListTile(
+                icon: Icon(
+                  Icons.info,
+                ),
+                applicationIcon: Icon(
+                  Icons.local_play,
+                ),
+                applicationName: 'Driving app',
+                applicationVersion: '1.0.0',
+                applicationLegalese: '© 2022 Company',
+                aboutBoxChildren: [
+                  ///Content goes here...
+                ],
+                child: Text('About app'),
+              ),
             ],
           );
-        } else {
-          return ListView(
-            children: [
-              ListTile(
-                title: Text('Login'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
-                    ),
-                  );
-                },
-              )
-            ],
-          );
-        }
-      },
-    ));
+        }));
   }
 }

@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
-
 // ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
-
 import '../dio.dart';
 import '../models/user.dart';
 
@@ -23,15 +23,32 @@ class Auth extends ChangeNotifier {
     // ignore: unused_local_variable
     String deviceId = await getDeviceId();
 
-    Dio.Response response =
-        await dio().post('/login', data: json.encode(Credentials));
+    try {
+      Dio.Response response =
+          await dio().post('/login', data: json.encode(Credentials));
 
-    String token = json.decode(response.toString())['access_token'];
-
-    //print("deviceId => " + deviceId);
-
-    await attempt(token);
-    storeToken(token);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.toString());
+        print(data);
+        if (data['error'] != null) {
+          Fluttertoast.showToast(
+              msg: "Nom d'utilisateur ou mot de pass incorrect",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.TOP_RIGHT,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color.fromARGB(255, 102, 70, 177),
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else if (data['access_token'] != null) {
+          String token = data['access_token'];
+          await attempt(token);
+          storeToken(token);
+        }
+      }
+    } on DioError catch (e) {
+      // ignore: avoid_print
+      print(e.response);
+    }
   }
 
   Future attempt(String token) async {
