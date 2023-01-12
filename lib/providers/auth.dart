@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+
 // ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
+import 'package:driving/screens/login_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -58,8 +60,6 @@ class Auth extends ChangeNotifier {
 
       _user = User.fromJson(json.decode(response.toString()));
       _authenticated = true;
-
-      log(_user.name!);
     } catch (e) {
       _authenticated = false;
       log(e.toString());

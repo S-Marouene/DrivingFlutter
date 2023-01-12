@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import '../screens/condidat/condidats_screens.dart';
+import '../screens/login_screen.dart';
 
-class NavDrawer extends StatelessWidget {
+class NavDrawer extends StatefulWidget {
   const NavDrawer({super.key});
   static const URLpic = 'https://smdev.tn/storage/profile_pic/';
+
+  @override
+  State<NavDrawer> createState() => _NavDrawerState();
+}
+
+class _NavDrawerState extends State<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -25,7 +32,7 @@ class NavDrawer extends StatelessWidget {
                   ),
                 ),
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(URLpic +
+                  backgroundImage: NetworkImage(NavDrawer.URLpic +
                       (auth.user.path == ''
                           ? 'unknown_profile.png'
                           : auth.user.path!)),
@@ -66,6 +73,7 @@ class NavDrawer extends StatelessWidget {
                 ),
                 title: const Text('Déconexion'),
                 onTap: () {
+                  print("clicked ");
                   Provider.of<Auth>(context, listen: false).logout();
                 },
               ),

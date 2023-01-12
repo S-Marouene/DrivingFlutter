@@ -42,9 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void _attemptAuthentication() async {
     final key = await storage.read(key: 'auth');
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(microseconds: 2000), () {
+      Provider.of<Auth>(context, listen: false).attempt(key!);
+    });
     // ignore: use_build_context_synchronously
-    Provider.of<Auth>(context, listen: false).attempt(key!);
+  }
+
+  checkIfAuthenticated() async {
+    await Future.delayed(Duration(
+        seconds:
+            4)); // could be a long running task, like a fetch from keychain
+    return true;
   }
 
   @override
@@ -58,11 +66,31 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Center(child: Consumer<Auth>(
         builder: (context, auth, child) {
-          if (auth.authenticated == true) {
-            return HomeScreen();
-          } else {
-            return LoginScreen();
-          }
+          checkIfAuthenticated().then((success) {
+            if (auth.authenticated == false) {
+              print("login");
+              //return LoginScreen();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+            } else {
+              print("home");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
+                ),
+              );
+              //return HomeScreen();
+            }
+          });
+
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       )),
     );
