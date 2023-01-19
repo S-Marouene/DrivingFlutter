@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
-
-// ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
 import 'package:dio/dio.dart';
-import 'package:driving/screens/login_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
-import '../dio.dart';
+import '../data/dio.dart';
 import '../models/user.dart';
 
 class Auth extends ChangeNotifier {
@@ -54,6 +51,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future attempt(String token) async {
+    print("attempt auth");
     try {
       Dio.Response response = await dio().get('/user-profile',
           options: Dio.Options(headers: {'Authorization': 'Bearer $token'}));

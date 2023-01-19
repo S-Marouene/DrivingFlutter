@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:driving/models/condidats.dart';
 // ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
-import '../dio.dart';
+import 'dio.dart';
 
 class CondidatsApi {
   static Future<List<Condidat>> getCondidats(String query) async {

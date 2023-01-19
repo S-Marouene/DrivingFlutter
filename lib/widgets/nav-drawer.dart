@@ -1,8 +1,8 @@
-import 'package:driving/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import '../screens/condidat/condidats_screens.dart';
+import '../screens/home_screen.dart';
 import '../screens/login_screen.dart';
 
 class NavDrawer extends StatefulWidget {

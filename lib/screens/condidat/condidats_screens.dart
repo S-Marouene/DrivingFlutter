@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:driving/models/condidats.dart';
 import 'package:driving/screens/condidat/details_condidat/details_condidat.dart';
 import 'package:flutter/material.dart';
-import '../../constants.dart';
+import '../../constants/constants.dart';
 import '../../data/allcondidats.dart';
 import '../../widgets/nav-drawer.dart';
 import '../../widgets/search_widget.dart';
